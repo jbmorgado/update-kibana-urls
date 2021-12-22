@@ -38,29 +38,21 @@ def replace_pattern_fields(pattern_id):
 	title = json_response["index_pattern"]["title"]
 	print(f"\nParsing index pattern: {title} ({pattern_id})...")
 
-	for obj in json_response["index_pattern"]["fields"].items():
-		try:
-			field = obj[0]
-			url = obj[1]["format"]["params"]["urlTemplate"]
-			if OLD_IP in url:
+	url = f'http://{KIBANA_IP}:5601/api/index_patterns/index_pattern/{pattern_id}/fields'
+	headers = {"kbn-xsrf": "reporting"}
+	fields = json_response["index_pattern"]["fields"]
+	for field in fields:
+		for item in fields[field]:
+			item_str = json.dumps(fields[field][item])
+			if OLD_IP in item_str:
 				print(f"\tReplacing URL in field: {field}")
-				new_url = url.replace(OLD_IP, KIBANA_IP)
-				myobj = {
-							'fields': {
-								field: {
-									'format': {
-										'params': {
-											'urlTemplate': new_url
-										}
-									}
-								}
-							}
-						}
-				post_url = f'http://{KIBANA_IP}:5601/api/index_patterns/index_pattern/{pattern_id}/fields'
-				requests.post(post_url, data = myobj)
-		except:
-			None
-	
+				item_str = item_str.replace(OLD_IP, KIBANA_IP)
+				data = f'{{ "fields": {{ "{field}": {{ "{item}": {item_str} }} }} }}'
+				test = requests.post(url, headers=headers, data = data)
+				for item in test:
+					print(item)
+				exit(0)
+
 ids = get_index_paterns()
 if len(ids) > 0:
 	replace_pattern_fields('bff63440-95ee-11ea-a3d7-2d6902bc19dd')
