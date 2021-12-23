@@ -8,8 +8,8 @@ WARNS = 0
 
 def get_index_paterns(ip):
     """
-    Retrieves all the Index Patterns present at the elasticsearch server with ip {ip}.
-    :param ip: the ip of the elasticsearch server
+    Retrieves all the Index Patterns present at the elasticsearch deployment with ip {ip}.
+    :param ip: the IP of the elasticsearch deployment
     :return: list with Index Patterns ID identifier
     """
     ids = []
@@ -33,12 +33,12 @@ def get_index_paterns(ip):
 
 def replace_fields_ip(id, ip, old_ip):
     """
-    Iterates over all fields in an Index Pattern and replaces any occurence of {old_ip} for {ip}.
-    This method doesn't work on script fields and at the present those must be altered manualy.
+    Iterates over all fields in an Index Pattern and replaces any occurrence of {old_ip} for {ip}.
+    This method doesn't work on script fields and at the present those must be altered manually.
     TODO: Explore possibility of altering scripts as well. These probably must be done outside of the Index Pattern logic.
     See: https://www.elastic.co/guide/en/elasticsearch/reference/current/create-stored-script-api.html
     :param id: the id of the Index Pattern
-    :param ip: the proper ip address of the elasticsearch server
+    :param ip: the proper ip address of the elasticsearch deployment
     :param old_ip: the outdated ip that we will be replacing
     """
     response = requests.get(f"http://{ip}:5601/api/index_patterns/index_pattern/{id}")
@@ -79,14 +79,14 @@ if __name__ == "__main__":
         "-ip",
         type=str,
         default="10.11.115.13",
-        help="ip address of elasticsearch server",
+        help="IP address of elasticsearch deployment",
         required=False,
     )
     parser.add_argument(
         "-old-ip",
         type=str,
         default="13.80.150.4",
-        help="ip address to replace",
+        help="IP address to replace",
         required=False,
     )
     args = parser.parse_args()
