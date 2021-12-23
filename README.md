@@ -18,3 +18,7 @@ where:
 Known Issues
 ------------
 As of the present, the `script` field whiting the Index Patterns cannot be replaced automatically by this tool. The tool throws a warning whenever it encounters one of them and they must be replaced manually on Elasticsearch deployment website.
+
+Environment
+-----------
+- Python 3.6 (https://www.python.org/)
