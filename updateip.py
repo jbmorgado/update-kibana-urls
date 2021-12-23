@@ -78,7 +78,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-ip",
         type=str,
-        default="10.11.115.13",
+        default="10.11.115.6",
         help="IP address of elasticsearch deployment",
         required=False,
     )
@@ -90,8 +90,6 @@ if __name__ == "__main__":
         required=False,
     )
     args = parser.parse_args()
-
-    # KIBANA_IP = '10.11.115.6'
 
     print("Gathering Index Patterns present in the database:")
     ids = get_index_paterns(args.ip)
